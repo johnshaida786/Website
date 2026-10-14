@@ -1,0 +1,740 @@
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    text-decoration:none;
+    border:0;
+    list-style:none;
+
+}
+
+body{
+    font-family:'Times New Roman', Times, serif;
+    width:100vw;
+    height:100vh;
+    font-size:0.88rem;
+    user-select:none;
+    overflow-x:hidden;
+    background-color:bisque;
+}
+.container{
+    display:grid;
+    width:96%;
+    gap:1.8rem;
+    grid-template-columns:14rem auto 14rem;
+    margin:0 auto;
+}
+a{
+    color:black;
+}
+h1{
+    font-weight:800;
+    font-size:1.8rem;
+    gap:1.5em;
+}
+h2{
+    font-size:1.4rem;
+
+}
+h3{
+    font-size:0.87rem;
+}
+h4{
+    font-size:0.8rem;
+}
+h5{
+    font-size:0.77rem;
+}
+small{
+    font-size:0.75rem;
+}
+.profile-photo{
+    width:2.8rem;
+    height:2.8rem;
+    border-radius:50%;
+    overflow:hidden;
+}
+.text-muted{
+    color:darkkhaki;
+}
+p{
+  color:gray;
+}
+b{
+    color:darkorange;
+}
+.primary{
+    color:aqua;
+}
+.success{
+    color:khaki;
+}
+.danger{
+    color:red;
+}
+.warning{
+    color:red;
+}
+/* aside */
+aside{
+    height:100vh;
+}
+aside .top{
+    background-color:white;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    margin-top:1.4rem;
+}
+aside .logo{
+    display:flex;
+    gap:1rem;
+}
+
+/*side Bar*/
+aside .sidebar{
+    background-color:white;
+    display:flex;
+    flex-direction:column;
+    height:85vh;
+    position:relative;
+    top:1rem;
+}
+aside .h3{
+    font-weight:400;
+}
+aside .sidebar a{
+    display:flex;
+    color:indigo;
+    margin-left:2rem;
+    gap:1rem;
+    align-items:center;
+    height:3.2rem;
+    transition:all.1s ease-in;
+}
+
+aside .sidebar a:last-child{
+    position:absolute;
+    bottom:1rem;
+    width:100%;
+}
+aside .sidebar a.active{
+    background:lightblue;
+    color:orange;
+    margin-left:0;
+  border-left:5px solid lightcoral; 
+}
+aside .sidebar a.active::before{
+    content:'';
+    width:6px;
+    height:100%;
+    background-color:purple;
+}
+aside .sidebar a:hover{
+    color:red;
+}
+aside .sidebar a:hover span{
+    margin-left:5rem;
+    transition:.4s ease;
+}
+
+/* *** Start Main Section *** */
+main{
+    margin-top:1.4rem;
+    width:auto;
+}
+main input{
+    background-color:transparent;
+    border:0;
+    outline:0;
+    color:darkred;
+}
+main .date{
+    display:inline-block;
+    background-color:white;
+    border-radius:0.4rem;
+    margin-top:1rem;
+    padding:0.5rem 1.6rem;
+}
+main .insights{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1.5rem;
+}
+main .insights>div{
+    background-color:white;
+    padding:1.8rem;
+    border-radius:2rem;
+    margin-top:1rem;
+    box-shadow:0 2rem 3rem lightcyan;
+    transition:all .3s ease;
+}
+main .insights>div{
+    background-color:white;
+    padding:0.5rem;
+    margin-top:1rem;
+    margin-bottom:2rem;
+    box-shadow:0 2rem 3rem lightcyan;
+    transition:all .3s ease;
+
+}
+main .insights>div:hover{
+    box-shadow:none;
+}
+main .insights>div span{
+    background:coral;
+    padding:0.5rem;
+    border-radius:50%;
+    color:white;
+    font-size:2rem;
+}
+main .insights>div.expenses span{
+    background:red;
+}
+main .insights>div.expense span{
+    background:darkred;
+}
+
+main .insights>div.progress span{
+    background:yellow;
+}
+main .insights>div.income span{
+    background:green;
+}
+
+main .insights>div .middle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+main .insight>div.middle h1{
+    font-size:1.0rem;
+}
+main h1{
+    color:#363949;
+}
+main .insights h1{
+    color:#363949;
+}
+main .insights h3{
+    color:#363949;
+}
+main .insights p{
+    color:#363949;
+}
+
+main .insights .progress{
+    position:relative;
+    height:68px;
+    width:68px;
+    border-radius:50px;
+}
+
+main .insights svg{
+    height:150px;
+    position:absolute;
+    top:0;
+}
+main .insights  circle{
+    fill:none;
+    stroke: blueviolet;
+    transform:rotate(270,80,80);
+    stroke-width:5;
+}
+main .insights .sales  circle{
+    stroke-dashoffset:0;
+    stroke-dasharray:90;
+}
+
+main .insights .progress  circle{
+    stroke-dashoffset:10;
+    stroke-dasharray:180;
+}
+
+main .insights .expenses svg circle{
+    stroke-dashoffset:10;
+    stroke-dasharray:190;
+}
+
+main .insights .progress svg circle{
+    stroke-dashoffset:10;
+    stroke-dasharray:110;
+}
+main .recent_order{
+    margin-top:2rem;
+}
+main .recent_order h2{
+    color:bisque;
+}
+main .recent_order table{
+    background-color:whitesmoke;
+    width:100%;
+    border-radius: 0.8rem;
+    padding:1.8rem;
+    text-align:center;
+    box-shadow:0 2rem 3rem goldenrod;
+    transition:all .3s ease;
+    color:#363949;
+}
+main .recent_order table:hover{
+    box-shadow:none;
+}
+main table tbody tr{
+    height:3.5rem;
+    border-bottom:1px solid white;
+    color:#363949;
+}
+main table tbody td{
+    height:3.8rem;
+    border-bottom:1px solid #363949;
+}
+
+.right{
+    margin-top:1.4rem;
+}
+.right .top{
+    display:flex;
+    justify-content:start;
+    gap:2rem;
+}
+.right .top button{
+    display:none;
+}
+.right .theme-toggler {
+   background-color:whitesmoke;
+   display:flex;
+   justify-content:space-between;
+   height:2.6rem;
+   width:5.2rem;
+   cursor:pointer;
+   border-radius:0.8rem;
+}
+
+
+.right .theme-toggler span{
+    font-size:1.2rem;
+    width:50%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.right .theme-toggler span.active{
+    background-color:purple;
+    color:whitesmoke;
+}
+body.dark-theme-variables {
+    background-color: #202528;
+    color: white;
+}
+
+body.dark-theme-variables aside .top,
+body.dark-theme-variables aside .sidebar {
+    background-color: #2c3035;
+}
+
+body.dark-theme-variables main .insights > div {
+    background-color: #2c3035;
+    color: white;
+}
+
+body.dark-theme-variables main .recent_order table {
+    background-color: #2c3035;
+    color: white;
+}
+
+body.dark-theme-variables main h1,
+body.dark-theme-variables main h2,
+body.dark-theme-variables main h3,
+body.dark-theme-variables main p,
+body.dark-theme-variables main td,
+body.dark-theme-variables main th {
+    color: white;
+}
+
+body.dark-theme-variables .date {
+    background-color: #2c3035;
+}
+
+body.dark-theme-variables .right .top {
+    background-color: #202528;
+}
+
+
+
+
+
+/******* Media Query **********/
+@media screen and (max-width:1200px){
+     .container{
+        width:94%;
+        grid-template-columns:7rem auto 14rem;
+     }     
+     aside .sidebar h3{
+         display:none;
+     }
+     aside .sidebar a:last-child{
+        position:relative;
+        margin-top:1.8rem;
+     }
+    main .insights{
+        display:grid;
+        grid-template-columns:repeat(1,1fr);
+    }
+}
+
+/**  Media Query for phones***/
+@media screen and (max-width:768px){
+    .container{
+        width:100%;
+        grid-template-columns:repeat(1,1fr);
+    }
+    aside{
+        position:fixed;
+        top:0;
+        left:0;
+        width:18rem;
+        height:100vh;
+        z-index:20;
+        background:white;
+        display:none;
+    }
+
+    aside .logo h2{
+        display:inline;
+    }
+    aside .sidebar h3{
+        display:inline;
+    }
+    aside .sidebar a{
+        width:100%;
+        height:3.4rem;
+    }
+  
+    aside .top div.close span{
+        display:inline;
+        position:absolute;
+        right:0;
+        margin-right:30px;
+        font-size:35px;
+        
+    }
+    .right .top{
+        position:fixed;
+        top:0;
+        left:0;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:0 0.8rem;
+        background:white;
+        width:100%;
+        height:4.6rem;
+        z-index:2;
+        box-shadow:0 1rem 1rem white;
+        margin:0;
+    }
+ main .insights{
+    display:grid;
+    grid-template-columns:repeat(1,1fr);
+    gap:1.6rem;
+    padding:40px;
+
+ }
+  main .recent_order{
+    padding:30px;
+    margin:0 auto;
+ }
+.right .top button{
+      display:block;
+      position:absolute;
+      left:1rem;
+      top:1.2rem;
+      background:transparent;
+      border:none;
+      cursor:pointer;
+      color: black;
+      z-index:30;
+}
+.right .top button span{
+    font-size:2rem; 
+}
+ 
+}
+.add-order {
+    background-color: white;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border-radius: 1rem;
+}
+
+.add-order h2 {
+    margin-bottom: 1rem;
+}
+
+.add-order input,
+.add-order select {
+    padding: 0.7rem;
+    margin-right: 0.5rem;
+    border: 1px solid gray;
+    border-radius: 0.4rem;
+}
+
+.add-order button {
+    padding: 0.5rem 1.2rem;
+    margin-top:0.5rem;
+    background-color: purple;
+    color: white;
+    border-radius: 0.8rem;
+    cursor: pointer;
+}
+
+.add-order button:hover {
+    background-color: darkviolet;
+}
+
+
+/* Delivery Partner Section Styles */
+.delivery-partner-section {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: var(--color-white);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
+}
+
+.delivery-partner-section:hover {
+    box-shadow: none;
+}
+
+.delivery-partner-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--color-dark);
+    font-size: 1.5rem;
+}
+
+/* Delivery Stats Grid */
+.delivery-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* Delivery Card */
+.delivery-card {
+    background: var(--color-background);
+    padding: 1.5rem;
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
+    border: 1px solid var(--color-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.delivery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.delivery-card h3 {
+    color: var(--color-dark);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Delivery Stats */
+.delivery-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-light);
+    transition: all 0.2s ease;
+}
+
+.stat-item:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: scale(1.02);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--color-info-dark);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-top: 0.2rem;
+}
+
+/* Stat Value Colors */
+.stat-value[style*="green"] {
+    color: #28a745 !important;
+}
+
+.stat-value[style*="orange"] {
+    color: #fd7e14 !important;
+}
+
+.stat-value[style*="blue"] {
+    color: #007bff !important;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .delivery-stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    
+    .delivery-card {
+        padding: 1rem;
+    }
+    
+    .delivery-stats {
+        gap: 0.5rem;
+    }
+    
+    .stat-item {
+        padding: 0.4rem;
+    }
+    
+    .stat-value {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .delivery-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .delivery-card {
+        padding: 0.8rem;
+    }
+}
+
+/* Dark Theme Support */
+.dark-theme-variables .delivery-partner-section {
+    background: var(--color-dark);
+    color: var(--color-white);
+}
+
+.dark-theme-variables .delivery-card {
+    background: var(--color-dark-variant);
+    border-color: var(--color-dark);
+}
+
+.dark-theme-variables .delivery-card h3 {
+    color: var(--color-white);
+}
+
+.dark-theme-variables .stat-item {
+    background: var(--color-dark);
+    border-color: var(--color-dark-variant);
+}
+
+.dark-theme-variables .stat-label {
+    color: var(--color-info-light);
+}
+
+.dark-theme-variables .stat-value {
+    color: var(--color-white);
+}
+
+/* Animation for new cards */
+.delivery-card {
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Empty state styling */
+.delivery-stats-grid .empty-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: var(--color-info-dark);
+    font-size: 1.1rem;
+    background: var(--color-background);
+    border-radius: var(--card-border-radius);
+    border: 2px dashed var(--color-light);
+}
+
+/* Color variables (if not defined in your main CSS) */
+:root {
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-warning: #ffbb55;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-info-light: #dce1eb;
+    --color-dark: #363949;
+    --color-light: rgba(132, 139, 200, 0.18);
+    --color-background: #f6f6f9;
+    --color-dark-variant: #677483;
+    --card-border-radius: 2rem;
+    --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+/* Optional: Add gradient borders or special effects */
+.delivery-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-success));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.delivery-card:hover::before {
+    opacity: 1;
+}
+
+/* Different colors for different agents */
+.delivery-card:nth-child(1)::before {
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+}
+
+.delivery-card:nth-child(2)::before {
+    background: linear-gradient(90deg, #2196F3, #03A9F4);
+}
+
+.delivery-card:nth-child(3)::before {
+    background: linear-gradient(90deg, #FF9800, #FFC107);
+}
