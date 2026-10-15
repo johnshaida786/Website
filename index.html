@@ -1,440 +1,485 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Food Delivery</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="styles3.css">  
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AMenu — Delivery Dashboard</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+<link rel="stylesheet" href="styles3.css" />
 </head>
 <body>
+
+<!-- ===== Toast container ===== -->
+<div id="toastContainer" class="toast-container"></div>
+
 <div class="container">
 
-    <!--Side Section start-->
-    <aside>
-       <div class="top">
-        <div class="logo">
-          <h2>A<span class="danger">Menu</span></h2>
-        </div>
-        <div class="close" id="close_btn">     
-            <span class="material-symbols-outlined">close</span>
-        </div>
-       </div>
-       <!--End Top-->
-       <div class="sidebar">
-        <a href="javascript:void(0)" id="dashboardLink" class="active">
-            <span class="material-symbols-outlined">grid_view</span>
-            <h3>dashboard</h3>
-        </a>   
-        <a href="javascript:void(0)" id="orderLink">
-            <span class="material-symbols-outlined">orders</span>
-            <h3>Order</h3>
-        </a> 
-        <a href="javascript:void(0)" id="deliveryLink">
-            <span class="material-symbols-outlined">delivery_truck_bolt</span>
-            <h3>Delivery Partner</h3>
-        </a>
-        <a href="javascript:void(0)">
-            <span class="material-symbols-outlined">logout</span>
-            <h3>logout</h3>
-        </a>
-       </div>
-    </aside>
-    <!--Side Section end-->
-
-    <!--main section start-->
-    <main>
-        <h1>Dashboard</h1>
-
-        <div class="date">
-            <input type="date">
-        </div>
-
-        <div class="insights">
-            <!--start selling-->
-            <div class="sales">
-                <span class="material-symbols-outlined">trending_up</span>
-                <div class="middle">
-                    <div class="left">
-                        <h3>Total orders</h3>
-                        <h1 id="totalOrders">0</h1>
-                    </div>
-                    <div class="progress">
-                        <svg>
-                            <circle r="30" cy="40" cx="40"></circle>
-                        </svg>
-                        <div class="number" id="totalPercent">0%</div>
-                    </div>
-                </div>
-                <small>Last 24 Hours</small>
-            </div>
-            <!--end selling-->
-
-            <!--Pending orders -->
-            <div class="expense">
-                <span class="material-symbols-outlined">local_mall</span>
-                <div class="middle">
-                    <div class="left">
-                        <h3>Total Pending</h3>
-                        <h1 id="pendingOrders">0</h1>
-                    </div>
-                    <div class="progress">
-                        <svg>
-                            <circle r="30" cy="40" cx="40"></circle>
-                        </svg>
-                        <div class="number" id="pendingPercent">0%</div>
-                    </div>
-                </div>
-                <small>Last 24 Hours</small>
-            </div>
-            <!--Pending orders-->
-
-            <!--Intransit-->
-            <div class="expenses">
-                <span class="material-symbols-outlined">briefcase_meal</span>
-                <div class="middle">
-                    <div class="left">
-                        <h3>Intransit</h3>
-                        <h1 id="progressOrders">0</h1>
-                    </div>
-                    <div class="progress">
-                        <svg>
-                            <circle r="30" cy="40" cx="40"></circle>
-                        </svg>
-                        <div class="number" id="progressPercent">0%</div>
-                    </div>
-                </div>
-                <small>Last 24 Hours</small>
-            </div>
-            <!--Intransit-->
-
-            <!--Order completed-->
-            <div class="income">
-                <span class="material-symbols-outlined">task_alt</span>
-                <div class="middle">
-                    <div class="left">
-                        <h3>Order Completed</h3>
-                        <h1 id="completedOrders">0</h1>
-                    </div>
-                    <div class="progress">
-                        <svg>
-                            <circle r="30" cy="40" cx="40"></circle>
-                        </svg>
-                        <div class="number" id="completedPercent">0%</div>
-                    </div>
-                </div>
-                <small>Last 24 Hours</small>
-            </div>
-            <!--order completed--> 
-        </div>      
-
-        <!-- Add Order -->
-        <div class="add-order">
-            <h2>Add New Order</h2>
-            <input type="text" id="orderid" placeholder="Order Id">
-            <select id="Agent">
-                <option value="Gopi">Gopi</option>  
-                <option value="Deepak">Deepak</option>
-                <option value="Rishi">Rishi</option>
-            </select>
-            <input type="text" id="ordername" placeholder="Order Name">
-            <input type="number" id="amount" placeholder="Amount">
-            <select id="status">
-                <option value="Pending">Pending</option>
-                <option value="Progress">Progress</option>
-                <option value="Completed">Completed</option>
-            </select>
-            <button type="button" id="addOrder">Add Order</button>
-        </div>
-
-        <!-- Recent Orders -->
-        <div class="recent_order" id="recentOrdersSection"> 
-            <h1>Recent Orders</h1> 
-            <table> 
-                <thead> 
-                    <tr> 
-                        <th>Order Id</th> 
-                        <th>Delivery Agent</th>
-                        <th>Order Name</th>  
-                        <th>Amount</th> 
-                        <th>Status</th> 
-                        <th>Action</th>
-                    </tr> 
-                </thead> 
-                <tbody id="orderTableBody">
-                    <!-- Dynamic orders will appear here -->
-                </tbody>
-            </table> 
-        </div>
-
-        <!-- Delivery Partner Section -->
-        <div class="delivery-partner-section" id="deliverySection" style="display:none;">
-            <h2>Delivery Partners</h2>
-            <div class="delivery-stats-grid" id="deliveryPartnerList">
-                <!-- Delivery partner cards will appear here -->
-            </div>
-        </div>
-    </main>
-    <!--main section end-->
-
-    <!--Right Section start-->
-    <div class="right">
-        <div class="top">
-            <button id="menu_bar">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-            <div class="theme-toggler">
-                <span class="material-symbols-outlined active" id="lightMode">light_mode</span>
-                <span class="material-symbols-outlined" id="darkMode">dark_mode</span>
-            </div>
-        </div>
-        <h2></h2>
+  <!-- ===== Sidebar ===== -->
+  <aside id="sidebar">
+    <div class="top">
+      <div class="logo">
+        <h2>A<span class="danger">Menu</span></h2>
+      </div>
+      <button class="icon-btn close" id="close_btn" aria-label="Close menu">
+        <span class="material-symbols-outlined">close</span>
+      </button>
     </div>
-    <!--end Right Section-->
+
+    <nav class="sidebar">
+      <a href="javascript:void(0)" id="dashboardLink" class="active">
+        <span class="material-symbols-outlined">grid_view</span>
+        <h3>Dashboard</h3>
+      </a>
+      <a href="javascript:void(0)" id="orderLink">
+        <span class="material-symbols-outlined">orders</span>
+        <h3>Orders</h3>
+      </a>
+      <a href="javascript:void(0)" id="deliveryLink">
+        <span class="material-symbols-outlined">delivery_truck_bolt</span>
+        <h3>Delivery Partners</h3>
+      </a>
+      <a href="javascript:void(0)" id="logoutLink">
+        <span class="material-symbols-outlined">logout</span>
+        <h3>Logout</h3>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Backdrop for mobile -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- ===== Main content ===== -->
+  <main>
+    <header class="main-header">
+      <div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <p class="muted" id="pageSubtitle">Overview of your orders</p>
+      </div>
+      <input type="date" id="dateInput" class="date-input" />
+    </header>
+
+    <!-- ===== Insights ===== -->
+    <section class="insights">
+      <div class="card sales">
+        <div class="card-icon"><span class="material-symbols-outlined">trending_up</span></div>
+        <div class="card-body">
+          <h3>Total Orders</h3>
+          <h1 id="totalOrders">0</h1>
+          <small>Last 24 hours</small>
+        </div>
+        <div class="progress">
+          <svg viewBox="0 0 80 80"><circle class="track" r="30" cy="40" cx="40"/><circle class="fill" id="totalRing" r="30" cy="40" cx="40"/></svg>
+          <span class="number" id="totalPercent">0%</span>
+        </div>
+      </div>
+
+      <div class="card expense">
+        <div class="card-icon"><span class="material-symbols-outlined">local_mall</span></div>
+        <div class="card-body">
+          <h3>Pending</h3>
+          <h1 id="pendingOrders">0</h1>
+          <small>Last 24 hours</small>
+        </div>
+        <div class="progress">
+          <svg viewBox="0 0 80 80"><circle class="track" r="30" cy="40" cx="40"/><circle class="fill" id="pendingRing" r="30" cy="40" cx="40"/></svg>
+          <span class="number" id="pendingPercent">0%</span>
+        </div>
+      </div>
+
+      <div class="card expenses">
+        <div class="card-icon"><span class="material-symbols-outlined">briefcase_meal</span></div>
+        <div class="card-body">
+          <h3>In Transit</h3>
+          <h1 id="progressOrders">0</h1>
+          <small>Last 24 hours</small>
+        </div>
+        <div class="progress">
+          <svg viewBox="0 0 80 80"><circle class="track" r="30" cy="40" cx="40"/><circle class="fill" id="progressRing" r="30" cy="40" cx="40"/></svg>
+          <span class="number" id="progressPercent">0%</span>
+        </div>
+      </div>
+
+      <div class="card income">
+        <div class="card-icon"><span class="material-symbols-outlined">task_alt</span></div>
+        <div class="card-body">
+          <h3>Completed</h3>
+          <h1 id="completedOrders">0</h1>
+          <small>Last 24 hours</small>
+        </div>
+        <div class="progress">
+          <svg viewBox="0 0 80 80"><circle class="track" r="30" cy="40" cx="40"/><circle class="fill" id="completedRing" r="30" cy="40" cx="40"/></svg>
+          <span class="number" id="completedPercent">0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Add Order ===== -->
+    <section class="add-order card-section" id="addOrderSection">
+      <div class="section-head">
+        <h2>Add New Order</h2>
+        <button class="ghost-btn" id="toggleFormBtn" type="button">
+          <span class="material-symbols-outlined">expand_more</span>
+        </button>
+      </div>
+      <form id="addOrderForm" class="order-form">
+        <input type="text" id="orderid" placeholder="Order ID" required />
+        <select id="Agent" required>
+          <option value="">Select Agent</option>
+          <option value="Gopi">Gopi</option>
+          <option value="Deepak">Deepak</option>
+          <option value="Rishi">Rishi</option>
+        </select>
+        <input type="text" id="ordername" placeholder="Order Name" required />
+        <input type="number" id="amount" placeholder="Amount" min="0" required />
+        <select id="status" required>
+          <option value="Pending">Pending</option>
+          <option value="Progress">Progress</option>
+          <option value="Completed">Completed</option>
+        </select>
+        <button type="submit" id="addOrder" class="primary-btn">
+          <span class="material-symbols-outlined">add</span>
+          Add Order
+        </button>
+      </form>
+    </section>
+
+    <!-- ===== Recent Orders ===== -->
+    <section class="recent_order card-section" id="recentOrdersSection">
+      <div class="section-head">
+        <h2>Recent Orders</h2>
+        <span class="muted" id="ordersCount">0 orders</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Agent</th>
+              <th>Order Name</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="orderTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== Delivery Partners ===== -->
+    <section class="delivery-partner-section card-section" id="deliverySection" style="display:none;">
+      <div class="section-head">
+        <h2>Delivery Partners</h2>
+      </div>
+      <div class="delivery-stats-grid" id="deliveryPartnerList"></div>
+    </section>
+  </main>
+
+  <!-- ===== Right rail ===== -->
+  <div class="right">
+    <div class="top">
+      <button class="icon-btn" id="menu_bar" aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="theme-toggler" role="group" aria-label="Theme toggle">
+        <span class="material-symbols-outlined active" id="lightMode" title="Light mode">light_mode</span>
+        <span class="material-symbols-outlined" id="darkMode" title="Dark mode">dark_mode</span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Get elements
-    const addBtn = document.getElementById("addOrder");
-    const tableBody = document.getElementById("orderTableBody");
-    const dashboardLink = document.getElementById("dashboardLink");
-    const orderLink = document.getElementById("orderLink");
-    const deliveryLink = document.getElementById("deliveryLink");
-    const insightsSection = document.querySelector(".insights");
-    const addOrderSection = document.querySelector(".add-order");
-    const recentOrdersSection = document.getElementById("recentOrdersSection");
-    const deliverySection = document.getElementById("deliverySection");
-    const mainTitle = document.querySelector("main h1");
-    const dateInput = document.querySelector(".date");
+/* ============================================================
+   AMenu Dashboard — vanilla JS
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  /* ---------- Element refs ---------- */
+  const $ = (id) => document.getElementById(id);
+  const addForm        = $("addOrderForm");
+  const tableBody      = $("orderTableBody");
+  const dashboardLink  = $("dashboardLink");
+  const orderLink      = $("orderLink");
+  const deliveryLink   = $("deliveryLink");
+  const logoutLink     = $("logoutLink");
+  const insightsEl     = document.querySelector(".insights");
+  const addOrderEl     = $("addOrderSection");
+  const recentEl       = $("recentOrdersSection");
+  const deliveryEl     = $("deliverySection");
+  const pageTitle      = $("pageTitle");
+  const pageSubtitle   = $("pageSubtitle");
+  const dateInput      = $("dateInput");
+  const ordersCount    = $("ordersCount");
+  const sidebar        = $("sidebar");
+  const backdrop       = $("sidebarBackdrop");
+  const toastBox       = $("toastContainer");
+  const toggleFormBtn  = $("toggleFormBtn");
 
-    // Store orders in array - starts empty
-    let orders = [];
+  /* ---------- State (persisted) ---------- */
+  const STORAGE_KEY = "amenu_orders_v1";
+  let orders = [];
+  try { orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { orders = []; }
 
-    // Function to add order
-    function addOrder(id, agent, name, amount, status) {
-        orders.push({ id, agent, name, amount, status });
+  const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+
+  /* ---------- Toast ---------- */
+  function toast(message, type = "success") {
+    const el = document.createElement("div");
+    el.className = `toast toast-${type}`;
+    el.innerHTML = `<span class="material-symbols-outlined">${
+      type === "success" ? "check_circle" : type === "error" ? "error" : "info"
+    }</span><span>${message}</span>`;
+    toastBox.appendChild(el);
+    requestAnimationFrame(() => el.classList.add("show"));
+    setTimeout(() => {
+      el.classList.remove("show");
+      setTimeout(() => el.remove(), 300);
+    }, 2600);
+  }
+
+  /* ---------- Ring progress ---------- */
+  function setRing(ringId, percentId, value) {
+    const ring = $(ringId);
+    const text = $(percentId);
+    const CIRC = 2 * Math.PI * 30;
+    const pct = Math.max(0, Math.min(100, value));
+    ring.style.strokeDasharray = `${CIRC}`;
+    ring.style.strokeDashoffset = `${CIRC - (CIRC * pct) / 100}`;
+    text.textContent = `${Math.round(pct)}%`;
+  }
+
+  /* ---------- Render orders ---------- */
+  function renderOrders() {
+    tableBody.innerHTML = "";
+    ordersCount.textContent = `${orders.length} order${orders.length !== 1 ? "s" : ""}`;
+
+    if (orders.length === 0) {
+      tableBody.innerHTML = `
+        <tr><td colspan="6" class="empty-cell">
+          <span class="material-symbols-outlined">inbox</span>
+          <p>No orders yet. Add your first order above!</p>
+        </td></tr>`;
+      return;
+    }
+
+    orders.forEach((order, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><span class="order-id">${order.id}</span></td>
+        <td><span class="agent-chip">${order.agent}</span></td>
+        <td>${order.name}</td>
+        <td><strong>₹${order.amount}</strong></td>
+        <td>
+          <select class="status-dropdown status-${order.status.toLowerCase()}" data-index="${index}">
+            <option value="Pending"   ${order.status === "Pending"   ? "selected" : ""}>Pending</option>
+            <option value="Progress"  ${order.status === "Progress"  ? "selected" : ""}>Progress</option>
+            <option value="Completed" ${order.status === "Completed" ? "selected" : ""}>Completed</option>
+          </select>
+        </td>
+        <td>
+          <button class="delete-btn" data-index="${index}" title="Delete order">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+        </td>`;
+      tableBody.appendChild(row);
+    });
+
+    document.querySelectorAll(".status-dropdown").forEach((dd) => {
+      dd.addEventListener("change", function () {
+        const i = +this.dataset.index;
+        orders[i].status = this.value;
+        this.className = `status-dropdown status-${this.value.toLowerCase()}`;
+        save();
+        updateStats();
+        updateDeliveryPartners();
+        toast(`Order ${orders[i].id} → ${this.value}`, "info");
+      });
+    });
+
+    document.querySelectorAll(".delete-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const i = +this.dataset.index;
+        const removed = orders[i];
+        orders.splice(i, 1);
+        save();
         renderOrders();
         updateStats();
         updateDeliveryPartners();
-    }
+        toast(`Order ${removed.id} deleted`, "error");
+      });
+    });
+  }
 
-    // Function to render orders in table
-    function renderOrders() {
-        tableBody.innerHTML = '';
-        if (orders.length === 0) {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="6" style="text-align:center;padding:20px;color:#888;">No orders yet. Add your first order!</td>`;
-            tableBody.appendChild(row);
-            return;
-        }
-        
-        orders.forEach((order, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${order.id}</td>
-                <td>${order.agent}</td>
-                <td>${order.name}</td>
-                <td>$${order.amount}</td>
-                <td>
-                    <select class="status-dropdown" data-index="${index}">
-                        <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                        <option value="Progress" ${order.status === 'Progress' ? 'selected' : ''}>Progress</option>
-                        <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                    </select>
-                </td>
-                <td>
-                    <button class="delete-btn" data-index="${index}" style="background:red;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;">Delete</button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-        });
+  /* ---------- Stats ---------- */
+  function updateStats() {
+    const total     = orders.length;
+    const pending   = orders.filter(o => o.status === "Pending").length;
+    const progress  = orders.filter(o => o.status === "Progress").length;
+    const completed = orders.filter(o => o.status === "Completed").length;
 
-        // Add event listeners to status dropdowns
-        document.querySelectorAll('.status-dropdown').forEach(dropdown => {
-            dropdown.addEventListener('change', function() {
-                const index = parseInt(this.dataset.index);
-                orders[index].status = this.value;
-                updateStats();
-                updateDeliveryPartners();
-            });
-        });
+    $("totalOrders").textContent     = total;
+    $("pendingOrders").textContent   = pending;
+    $("progressOrders").textContent  = progress;
+    $("completedOrders").textContent = completed;
 
-        // Add event listeners to delete buttons
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const index = parseInt(this.dataset.index);
-                if (confirm('Delete this order?')) {
-                    orders.splice(index, 1);
-                    renderOrders();
-                    updateStats();
-                    updateDeliveryPartners();
-                }
-            });
-        });
-    }
+    setRing("totalRing",     "totalPercent",     total ? (total / total) * 100 : 0);
+    setRing("pendingRing",   "pendingPercent",   total ? (pending / total) * 100 : 0);
+    setRing("progressRing",  "progressPercent",  total ? (progress / total) * 100 : 0);
+    setRing("completedRing", "completedPercent", total ? (completed / total) * 100 : 0);
+  }
 
-    // Function to update stats cards
-    function updateStats() {
-        const total = orders.length;
-        const pending = orders.filter(o => o.status === 'Pending').length;
-        const progress = orders.filter(o => o.status === 'Progress').length;
-        const completed = orders.filter(o => o.status === 'Completed').length;
+  /* ---------- Delivery partners ---------- */
+  function updateDeliveryPartners() {
+    const container = $("deliveryPartnerList");
+    const agents = ["Gopi", "Deepak", "Rishi"];
+    container.innerHTML = "";
 
-        document.getElementById('totalOrders').textContent = total;
-        document.getElementById('pendingOrders').textContent = pending;
-        document.getElementById('progressOrders').textContent = progress;
-        document.getElementById('completedOrders').textContent = completed;
+    let hasOrders = false;
 
-        document.getElementById('totalPercent').textContent = total > 0 ? Math.round((completed/total)*100) + '%' : '0%';
-        document.getElementById('pendingPercent').textContent = total > 0 ? Math.round((pending/total)*100) + '%' : '0%';
-        document.getElementById('progressPercent').textContent = total > 0 ? Math.round((progress/total)*100) + '%' : '0%';
-        document.getElementById('completedPercent').textContent = total > 0 ? Math.round((completed/total)*100) + '%' : '0%';
-    }
+    agents.forEach((agent) => {
+      const list      = orders.filter(o => o.agent === agent);
+      const total     = list.length;
+      const completed = list.filter(o => o.status === "Completed").length;
+      const pending   = list.filter(o => o.status === "Pending").length;
+      const progress  = list.filter(o => o.status === "Progress").length;
 
-    // Function to update delivery partner cards
-    function updateDeliveryPartners() {
-        const container = document.getElementById('deliveryPartnerList');
-        const agents = ['Gopi', 'Deepak', 'Rishi'];
-        container.innerHTML = '';
+      if (total > 0) hasOrders = true;
 
-        let hasOrders = false;
-        agents.forEach(agent => {
-            const agentOrders = orders.filter(o => o.agent === agent);
-            const total = agentOrders.length;
-            const completed = agentOrders.filter(o => o.status === 'Completed').length;
-            const pending = agentOrders.filter(o => o.status === 'Pending').length;
-            const progress = agentOrders.filter(o => o.status === 'Progress').length;
-
-            if (total > 0) hasOrders = true;
-
-            const card = document.createElement('div');
-            card.className = 'delivery-card';
-            card.innerHTML = `
-                <h3> ${agent}</h3>
-                <div class="delivery-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Total Orders</span>
-                        <span class="stat-value">${total}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Completed</span>
-                        <span class="stat-value" style="color:green;">${completed}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Pending</span>
-                        <span class="stat-value" style="color:orange;">${pending}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">In Progress</span>
-                        <span class="stat-value" style="color:blue;">${progress}</span>
-                    </div>
-                </div>
-            `;
-            container.appendChild(card);
-        });
-
-        // Show message if no orders
-        if (!hasOrders) {
-            const message = document.createElement('div');
-            message.style.cssText = 'grid-column:1/-1;text-align:center;padding:40px;color:#888;font-size:16px;';
-            message.textContent = 'No orders assigned to delivery partners yet. Add orders to see statistics.';
-            container.appendChild(message);
-        }
-    }
-
-    // Add Order button click
-    addBtn.addEventListener("click", function() {
-        const id = document.getElementById("orderid").value.trim();
-        const agent = document.getElementById("Agent").value;
-        const name = document.getElementById("ordername").value.trim();
-        const amt = document.getElementById("amount").value.trim();
-        const status = document.getElementById("status").value;
-
-        if(id && agent && name && amt) {
-            addOrder(id, agent, name, amt, status);
-            
-            document.getElementById("orderid").value = "";
-            document.getElementById("Agent").value = "Gopi";
-            document.getElementById("ordername").value = "";
-            document.getElementById("amount").value = "";
-            document.getElementById("status").value = "Pending";
-
-            alert("Order Added!");
-        } else {
-            alert("Please fill all fields!");
-        }
+      const initials = agent.slice(0, 2).toUpperCase();
+      const card = document.createElement("div");
+      card.className = "delivery-card";
+      card.innerHTML = `
+        <div class="agent-head">
+          <div class="avatar">${initials}</div>
+          <div>
+            <h3>${agent}</h3>
+            <small class="muted">${total} order${total !== 1 ? "s" : ""}</small>
+          </div>
+        </div>
+        <div class="delivery-stats">
+          <div class="stat-item"><span class="stat-label">Completed</span><span class="stat-value green">${completed}</span></div>
+          <div class="stat-item"><span class="stat-label">Pending</span><span class="stat-value orange">${pending}</span></div>
+          <div class="stat-item"><span class="stat-label">In Progress</span><span class="stat-value blue">${progress}</span></div>
+        </div>`;
+      container.appendChild(card);
     });
 
-    // Navigation functions
-    function showMainView() {
-        insightsSection.style.display = "grid";
-        addOrderSection.style.display = "block";
-        recentOrdersSection.style.display = "none";
-        deliverySection.style.display = "none";
-        dateInput.style.display = "inline-block";
-        mainTitle.textContent = "Dashboard";
-        
-        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-        if (window.event && window.event.currentTarget) {
-            window.event.currentTarget.classList.add('active');
-        }
+    if (!hasOrders) {
+      container.innerHTML = `
+        <div class="empty-cell" style="grid-column:1/-1;">
+          <span class="material-symbols-outlined">person_off</span>
+          <p>No orders assigned yet. Add orders to see partner stats.</p>
+        </div>`;
+    }
+  }
+
+  /* ---------- Add order ---------- */
+  addForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const id     = $("orderid").value.trim();
+    const agent  = $("Agent").value;
+    const name   = $("ordername").value.trim();
+    const amount = $("amount").value.trim();
+    const status = $("status").value;
+
+    if (!id || !agent || !name || !amount) {
+      toast("Please fill all fields.", "error");
+      return;
     }
 
-    function showDeliveryView() {
-        insightsSection.style.display = "grid";
-        addOrderSection.style.display = "none";  // Hide Add Order in Delivery view
-        recentOrdersSection.style.display = "block";
-        deliverySection.style.display = "block";
-        dateInput.style.display = "inline-block";
-        mainTitle.textContent = "Delivery Partners";
-        
-        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-        deliveryLink.classList.add('active');
-        
-        updateDeliveryPartners();
-        updateStats();
-    }
-
-    // Navigation event listeners
-    dashboardLink.addEventListener("click", showMainView);
-    orderLink.addEventListener("click", showMainView);
-    deliveryLink.addEventListener("click", showDeliveryView);
-
-    // Set initial view (Dashboard)
-    showMainView();
-
-    // Close button for mobile
-    document.getElementById("close_btn").addEventListener("click", function() {
-        document.querySelector("aside").style.display = "none";
-    });
-
-    // Menu button for mobile
-    document.getElementById("menu_bar").addEventListener("click", function() {
-        const aside = document.querySelector("aside");
-        aside.style.display = aside.style.display === "block" ? "none" : "block";
-    });
-
-    // Theme toggle
-    const lightMode = document.getElementById("lightMode");
-    const darkMode = document.getElementById("darkMode");
-    
-    lightMode.addEventListener("click", function() {
-        document.body.classList.remove("dark-theme-variables");
-        this.classList.add("active");
-        darkMode.classList.remove("active");
-    });
-    
-    darkMode.addEventListener("click", function() {
-        document.body.classList.add("dark-theme-variables");
-        this.classList.add("active");
-        lightMode.classList.remove("active");
-    });
-
-    // Initialize with empty state (no sample orders)
+    orders.unshift({ id, agent, name, amount, status });
+    save();
     renderOrders();
     updateStats();
     updateDeliveryPartners();
+    addForm.reset();
+    toast(`Order ${id} added`, "success");
+  });
 
-    console.log("Script loaded successfully! Start adding orders.");
+  /* ---------- Navigation ---------- */
+  function setActiveLink(link) {
+    document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active"));
+    if (link) link.classList.add("active");
+  }
+
+  function showView(view) {
+    if (view === "dashboard" || view === "orders") {
+      insightsEl.style.display = "grid";
+      addOrderEl.style.display = "block";
+      recentEl.style.display   = view === "orders" ? "block" : "none";
+      deliveryEl.style.display = "none";
+      dateInput.style.display  = "inline-block";
+      pageTitle.textContent    = view === "orders" ? "Orders" : "Dashboard";
+      pageSubtitle.textContent = view === "orders" ? "Manage your orders" : "Overview of your orders";
+      setActiveLink(view === "orders" ? orderLink : dashboardLink);
+    } else if (view === "delivery") {
+      insightsEl.style.display = "grid";
+      addOrderEl.style.display = "none";
+      recentEl.style.display   = "none";
+      deliveryEl.style.display = "block";
+      dateInput.style.display  = "inline-block";
+      pageTitle.textContent    = "Delivery Partners";
+      pageSubtitle.textContent = "Performance by agent";
+      setActiveLink(deliveryLink);
+      updateDeliveryPartners();
+    }
+    closeSidebar();
+  }
+
+  dashboardLink.addEventListener("click", () => showView("dashboard"));
+  orderLink.addEventListener("click",     () => showView("orders"));
+  deliveryLink.addEventListener("click",  () => showView("delivery"));
+  logoutLink.addEventListener("click",    () => toast("Logout is disabled in this demo.", "info"));
+
+  /* ---------- Sidebar (mobile) ---------- */
+  function openSidebar()  { sidebar.classList.add("open");  backdrop.classList.add("show"); }
+  function closeSidebar() { sidebar.classList.remove("open"); backdrop.classList.remove("show"); }
+
+  $("menu_bar").addEventListener("click", () =>
+    sidebar.classList.contains("open") ? closeSidebar() : openSidebar()
+  );
+  $("close_btn").addEventListener("click", closeSidebar);
+  backdrop.addEventListener("click", closeSidebar);
+
+  /* ---------- Add-order form collapse ---------- */
+  toggleFormBtn.addEventListener("click", () => {
+    addOrderEl.classList.toggle("collapsed");
+    const icon = toggleFormBtn.querySelector(".material-symbols-outlined");
+    icon.textContent = addOrderEl.classList.contains("collapsed") ? "expand_more" : "expand_less";
+  });
+
+  /* ---------- Theme (persisted + system default) ---------- */
+  const THEME_KEY = "amenu_theme";
+  const lightBtn = $("lightMode");
+  const darkBtn  = $("darkMode");
+
+  function applyTheme(theme) {
+    document.body.classList.toggle("dark-theme-variables", theme === "dark");
+    lightBtn.classList.toggle("active", theme === "light");
+    darkBtn.classList.toggle("active",  theme === "dark");
+    localStorage.setItem(THEME_KEY, theme);
+  }
+
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(savedTheme || (prefersDark ? "dark" : "light"));
+
+  lightBtn.addEventListener("click", () => applyTheme("light"));
+  darkBtn.addEventListener("click",  () => applyTheme("dark"));
+
+  /* ---------- Init ---------- */
+  renderOrders();
+  updateStats();
+  updateDeliveryPartners();
+  showView("dashboard");
+
+  // Close sidebar when resizing to desktop
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) closeSidebar();
+  });
+
+  console.log("✅ AMenu dashboard ready.");
 });
 </script>
 </body>
