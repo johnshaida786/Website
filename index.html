@@ -6,7 +6,7 @@
 <title>AMenu — Delivery Dashboard</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
-<link rel="stylesheet" href="styles3.css" />
+<link rel="stylesheet" href="styles3.css?v=3" />
 </head>
 <body>
 
@@ -118,7 +118,7 @@
     <section class="add-order card-section" id="addOrderSection">
       <div class="section-head">
         <h2>Add New Order</h2>
-        <button class="ghost-btn" id="toggleFormBtn" type="button">
+        <button class="ghost-btn" id="toggleFormBtn" type="button" aria-label="Toggle form">
           <span class="material-symbols-outlined">expand_more</span>
         </button>
       </div>
@@ -242,6 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function setRing(ringId, percentId, value) {
     const ring = $(ringId);
     const text = $(percentId);
+    if (!ring || !text) return;
     const CIRC = 2 * Math.PI * 30;
     const pct = Math.max(0, Math.min(100, value));
     ring.style.strokeDasharray = `${CIRC}`;
@@ -467,6 +468,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   lightBtn.addEventListener("click", () => applyTheme("light"));
   darkBtn.addEventListener("click",  () => applyTheme("dark"));
+
+  /* ---------- Cursor-follow glow on cards (desktop) ---------- */
+  if (window.matchMedia("(hover: hover)").matches) {
+    document.querySelectorAll(".card").forEach((card) => {
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        card.style.setProperty("--my", `${e.clientY - r.top}px`);
+      });
+    });
+  }
 
   /* ---------- Init ---------- */
   renderOrders();
