@@ -2,16 +2,1058 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>AMenu — Delivery Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
-<link rel="stylesheet" href="styles3.css?v=3" />
+
+<style>
+/* =========================================================
+   AMenu — Delivery Dashboard
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. DESIGN TOKENS
+   --------------------------------------------------------- */
+:root{
+  --bg:            #f4f6fb;
+  --surface:       #ffffff;
+  --surface-2:     #f8fafc;
+  --border:        #e5e9f2;
+  --text:          #1e293b;
+  --text-muted:    #64748b;
+
+  --primary:       #5b4ee8;
+  --primary-ink:   #5b4ee8;
+  --primary-soft:  #eceafe;
+
+  --green:         #16a34a;
+  --green-soft:    #dcfce7;
+  --orange:        #f59e0b;
+  --orange-soft:   #fef3c7;
+  --blue:          #2563eb;
+  --blue-soft:     #dbeafe;
+  --red:           #ef4444;
+  --red-soft:      #fee2e2;
+
+  --shadow-sm:     0 1px 2px rgba(15, 23, 42, .04);
+  --shadow-md:     0 4px 16px rgba(15, 23, 42, .06);
+  --shadow-lg:     0 12px 32px rgba(15, 23, 42, .08);
+
+  --radius:        14px;
+  --radius-sm:     10px;
+
+  --sidebar-w:     240px;
+  --right-w:       72px;
+  --header-h:      58px;
+
+  --ease:          cubic-bezier(.4, 0, .2, 1);
+}
+
+body.dark-theme-variables{
+  --bg:            #0f172a;
+  --surface:       #1e293b;
+  --surface-2:     #273449;
+  --border:        #334155;
+  --text:          #e2e8f0;
+  --text-muted:    #94a3b8;
+
+  --primary-ink:   #a5b4fc;
+  --primary-soft:  #2a2a55;
+
+  --green:         #4ade80;
+  --green-soft:    #14532d;
+  --orange:        #fbbf24;
+  --orange-soft:   #713f12;
+  --blue:          #60a5fa;
+  --blue-soft:     #1e3a8a;
+  --red:           #f87171;
+  --red-soft:      #7f1d1d;
+
+  --shadow-sm:     0 1px 2px rgba(0,0,0,.40);
+  --shadow-md:     0 4px 16px rgba(0,0,0,.35);
+  --shadow-lg:     0 12px 32px rgba(0,0,0,.50);
+}
+
+/* ---------------------------------------------------------
+   2. BASE / RESET
+   --------------------------------------------------------- */
+*, *::before, *::after{ box-sizing: border-box; }
+*{ margin: 0; padding: 0; }
+
+html{
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+body{
+  min-height: 100vh;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background .25s ease, color .25s ease;
+}
+
+h1, h2, h3{ font-weight: 700; letter-spacing: -.01em; }
+a{ color: inherit; text-decoration: none; }
+button, input, select, textarea{ font-family: inherit; font-size: 14px; color: inherit; }
+button{ background: none; border: none; cursor: pointer; }
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible{
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.muted{ color: var(--text-muted); font-size: 13px; }
+.is-hidden{ display: none !important; }
+
+.material-symbols-outlined{
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-size: 22px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* ---------------------------------------------------------
+   3. LAYOUT SHELL
+   --------------------------------------------------------- */
+.container{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--right-w);
+  min-height: 100vh;
+}
+
+/* ---------------------------------------------------------
+   4. SIDEBAR
+   --------------------------------------------------------- */
+aside{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  width: var(--sidebar-w);
+  height: 100vh;
+  padding: 22px 16px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  transform: translateX(0);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+
+body.sidebar-closed aside{
+  transform: translateX(-100%);
+  box-shadow: none;
+  pointer-events: none;
+}
+
+aside .top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.logo h2{ font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+.logo .danger{ color: var(--primary); }
+
+.sidebar{ display: flex; flex-direction: column; gap: 4px; }
+
+.sidebar a{
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+.sidebar a h3{ font-size: 14px; font-weight: 500; }
+
+.sidebar a::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 60%;
+  background: var(--primary);
+  border-radius: 0 4px 4px 0;
+  transform: translateY(-50%) scaleY(0);
+  transition: transform .22s var(--ease);
+}
+.sidebar a:hover::before{ transform: translateY(-50%) scaleY(1); }
+
+.sidebar a:hover{
+  background: var(--surface-2);
+  color: var(--text);
+  transform: translateX(2px);
+}
+
+.sidebar a.active{
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(91, 78, 232, .35);
+}
+.sidebar a.active::before{
+  background: #fff;
+  transform: translateY(-50%) scaleY(1);
+}
+.sidebar a.active .material-symbols-outlined{ color: #fff; }
+.sidebar a:active{ transform: scale(.98); }
+
+/* ---------------------------------------------------------
+   5. MODERN ICON BUTTONS
+   --------------------------------------------------------- */
+.icon-btn{
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  transition: background .2s ease, color .2s ease, border-color .2s ease,
+              transform .2s ease, box-shadow .2s ease;
+}
+.icon-btn:hover{ background: var(--surface-2); box-shadow: var(--shadow-sm); }
+
+/* ---------------------------------------------------------
+   ★ MENU BUTTON — hides itself while the sidebar is open
+   Appears beside "Dashboard" only when the sidebar is closed.
+   --------------------------------------------------------- */
+#menu_bar{
+  transition: opacity .25s var(--ease),
+              transform .25s var(--ease),
+              width .25s var(--ease),
+              margin .25s var(--ease),
+              border-width .25s var(--ease),
+              box-shadow .25s var(--ease);
+}
+
+/* When sidebar is OPEN → menu button disappears */
+body:not(.sidebar-closed) #menu_bar{
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(.5);
+  width: 0;
+  border-width: 0;
+  margin-right: -16px;   /* cancel the .header-left gap so title sits at edge */
+  box-shadow: none;
+}
+
+/* Modern rounded-SVG close button */
+.icon-btn.close{
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  transition: background .22s ease, color .22s ease, border-color .22s ease,
+              transform .32s var(--ease), box-shadow .22s ease;
+}
+.icon-btn.close svg{ width: 15px; height: 15px; display: block; }
+.icon-btn.close:hover{
+  background: var(--red-soft);
+  border-color: transparent;
+  color: var(--red);
+  transform: rotate(90deg);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, .22);
+}
+.icon-btn.close:active{ transform: rotate(90deg) scale(.92); }
+
+/* ---------------------------------------------------------
+   6. MAIN COLUMN
+   --------------------------------------------------------- */
+main{
+  grid-column: 1;
+  min-width: 0;
+  margin-left: var(--sidebar-w);
+  padding: 26px 28px 60px;
+  overflow-x: hidden;
+  transition: margin-left .3s var(--ease);
+}
+
+body.sidebar-closed main{
+  margin-left: 0;
+}
+
+.main-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+/* Header left — holds the menu button + title */
+.header-left{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.header-left > .icon-btn{ flex-shrink: 0; }
+
+.main-header h1{ font-size: 26px; }
+.main-header p { font-size: 13px; }
+
+/* ---------------------------------------------------------
+   7. MODERN DATE PICKER + CALENDAR
+   --------------------------------------------------------- */
+.date-picker{ position: relative; }
+
+.date-trigger{
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 13.5px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.date-trigger > .material-symbols-outlined:first-child{
+  font-size: 19px;
+  color: var(--primary-ink);
+}
+.date-trigger .chevron{
+  font-size: 18px;
+  color: var(--text-muted);
+  transition: transform .25s var(--ease);
+}
+.date-trigger:hover{
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.date-picker.open .date-trigger{
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.date-picker.open .date-trigger .chevron{ transform: rotate(180deg); }
+
+.calendar-popup{
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 95;
+  width: 302px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px) scale(.96);
+  transform-origin: top right;
+  transition: opacity .2s ease, transform .22s var(--ease), visibility .22s;
+}
+.date-picker.open .calendar-popup{
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.cal-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.cal-title{ font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+
+.cal-nav{
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  color: var(--text-muted);
+  transition: background .16s ease, color .16s ease, transform .16s ease;
+}
+.cal-nav:hover{ background: var(--surface-2); color: var(--text); }
+.cal-nav:active{ transform: scale(.9); }
+.cal-nav .material-symbols-outlined{ font-size: 20px; }
+
+.cal-weekdays{
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 6px;
+}
+.cal-weekdays span{
+  padding: 4px 0;
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cal-grid{
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-day{
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .16s ease, color .16s ease, transform .16s ease;
+}
+.cal-day:hover{ background: var(--surface-2); }
+.cal-day:active{ transform: scale(.9); }
+.cal-day.out{ color: var(--text-muted); opacity: .4; }
+
+.cal-day.today{
+  box-shadow: inset 0 0 0 1.5px var(--primary);
+  color: var(--primary-ink);
+  font-weight: 700;
+}
+
+.cal-day.selected{
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 6px 14px rgba(91, 78, 232, .35);
+}
+.cal-day.selected:hover{ background: var(--primary); }
+
+.cal-foot{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.cal-today-btn{
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: filter .16s ease, transform .16s ease;
+}
+.cal-today-btn:hover{ filter: brightness(.95); }
+.cal-today-btn:active{ transform: scale(.96); }
+.cal-hint{ font-size: 11.5px; color: var(--text-muted); }
+
+/* ---------------------------------------------------------
+   8. INSIGHT CARDS
+   --------------------------------------------------------- */
+.insights{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.card{
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease),
+              border-color .3s ease;
+}
+
+.card::after{
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(91, 78, 232, .14),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity .35s ease;
+  pointer-events: none;
+}
+.card:hover{
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+  box-shadow: 0 12px 28px rgba(15, 23, 42, .08),
+              0 4px 12px rgba(91, 78, 232, .10);
+}
+.card:hover::after{ opacity: 1; }
+
+.card-icon{
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  transition: transform .3s var(--ease);
+}
+.card:hover .card-icon{ transform: scale(1.08) rotate(-3deg); }
+
+.card.expense  .card-icon{ background: var(--orange-soft); color: var(--orange); }
+.card.expenses .card-icon{ background: var(--blue-soft);   color: var(--blue);   }
+.card.income   .card-icon{ background: var(--green-soft);  color: var(--green);  }
+
+.card-body h3{
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+}
+.card-body h1{ margin: 2px 0; font-size: 26px; font-weight: 800; }
+.card-body small{ font-size: 11px; color: var(--text-muted); }
+
+.progress{ position: relative; flex-shrink: 0; width: 64px; height: 64px; }
+.progress svg{ width: 64px; height: 64px; transform: rotate(-90deg); }
+.progress circle{ fill: none; stroke-width: 6; }
+.progress .track{ stroke: var(--border); }
+.progress .fill{
+  stroke: var(--primary);
+  stroke-linecap: round;
+  transition: stroke-dashoffset .6s var(--ease), filter .3s ease;
+}
+.card.expense  .progress .fill{ stroke: var(--orange); }
+.card.expenses .progress .fill{ stroke: var(--blue);   }
+.card.income   .progress .fill{ stroke: var(--green);  }
+.card:hover .progress .fill{ filter: drop-shadow(0 0 4px currentColor); }
+
+.progress .number{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (hover: none){
+  .card:active{ transform: scale(.985); transition: transform .12s ease; }
+}
+
+/* ---------------------------------------------------------
+   9. SECTION BLOCKS
+   --------------------------------------------------------- */
+.card-section{
+  margin-bottom: 20px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.section-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.section-head h2{ font-size: 17px; }
+
+/* ---------------------------------------------------------
+   10. ORDER FORM
+   --------------------------------------------------------- */
+.order-form{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  max-height: 500px;
+  overflow: hidden;
+  transition: max-height .3s var(--ease), opacity .22s ease;
+}
+.add-order.collapsed .order-form{
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.add-order.collapsed .section-head{ margin-bottom: 0; }
+
+.order-form input,
+.order-form select{
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.order-form input::placeholder{ color: var(--text-muted); }
+.order-form input:focus,
+.order-form select:focus{
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.primary-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 6px 14px rgba(91, 78, 232, .28);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.primary-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 22px rgba(91, 78, 232, .35); }
+.primary-btn:active{ transform: translateY(0); }
+.primary-btn .material-symbols-outlined{ font-size: 18px; }
+
+.ghost-btn{
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+.ghost-btn:hover{
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--primary);
+}
+
+/* ---------------------------------------------------------
+   11. TABLE
+   --------------------------------------------------------- */
+.table-wrap{
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-sm);
+}
+
+table{ width: 100%; min-width: 640px; border-collapse: collapse; }
+
+thead th{
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+tbody td{
+  padding: 12px 14px;
+  font-size: 13.5px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody tr{ transition: background .15s ease; }
+tbody tr:hover{ background: var(--surface-2); }
+tbody tr:last-child td{ border-bottom: none; }
+
+.order-id{ font-weight: 600; font-size: 12.5px; }
+
+.agent-chip{
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-dropdown{
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 6px 28px 6px 12px;
+  border: none;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  background-size: 11px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  transition: filter .18s ease;
+}
+.status-dropdown:hover{ filter: brightness(.96); }
+
+.status-pending  { background-color: var(--orange-soft); color: var(--orange); }
+.status-progress { background-color: var(--blue-soft);   color: var(--blue);   }
+.status-completed{ background-color: var(--green-soft);  color: var(--green);  }
+
+.delete-btn{
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-muted);
+  transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+.delete-btn .material-symbols-outlined{ font-size: 18px; }
+.delete-btn:hover{ background: var(--red-soft); color: var(--red); transform: scale(1.06); }
+
+.empty-cell{
+  padding: 38px 16px;
+  text-align: center;
+  color: var(--text-muted);
+}
+.empty-cell .material-symbols-outlined{
+  display: block;
+  margin: 0 auto 8px;
+  font-size: 38px;
+  opacity: .5;
+}
+.empty-cell p{ font-size: 13px; }
+
+/* ---------------------------------------------------------
+   12. DELIVERY PARTNERS
+   --------------------------------------------------------- */
+.delivery-stats-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.delivery-card{
+  padding: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease),
+              border-color .25s ease;
+}
+.delivery-card:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+}
+
+.agent-head{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.avatar{
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.delivery-stats{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+.stat-item{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.stat-label{
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--text-muted);
+}
+.stat-value{ font-size: 16px; font-weight: 800; }
+.stat-value.green { color: var(--green);  }
+.stat-value.orange{ color: var(--orange); }
+.stat-value.blue  { color: var(--blue);   }
+
+/* ---------------------------------------------------------
+   13. RIGHT RAIL / THEME TOGGLER
+   --------------------------------------------------------- */
+.right{
+  grid-column: 2;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 22px 0;
+}
+.right .top{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.theme-toggler{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.theme-toggler .material-symbols-outlined{
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+.theme-toggler .material-symbols-outlined:hover{
+  background: var(--surface-2);
+  color: var(--text);
+}
+.theme-toggler .material-symbols-outlined.active{
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(91, 78, 232, .35);
+}
+
+/* ---------------------------------------------------------
+   14. TOASTS
+   --------------------------------------------------------- */
+.toast-container{
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 320px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  font-size: 13.5px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity .3s ease, transform .3s var(--ease);
+}
+.toast.show{ opacity: 1; transform: translateX(0); }
+.toast .material-symbols-outlined{ font-size: 20px; }
+.toast-success .material-symbols-outlined{ color: var(--green); }
+.toast-error   .material-symbols-outlined{ color: var(--red);   }
+.toast-info    .material-symbols-outlined{ color: var(--blue);  }
+
+/* ---------------------------------------------------------
+   15. MOBILE BACKDROP
+   --------------------------------------------------------- */
+.sidebar-backdrop{
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(15, 23, 42, .5);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .28s ease, visibility .28s ease;
+}
+
+/* ---------------------------------------------------------
+   16. RESPONSIVE
+   --------------------------------------------------------- */
+@media (max-width: 1100px){
+
+  .container{ grid-template-columns: minmax(0, 1fr); }
+
+  aside{
+    width: 268px;
+    max-width: 84vw;
+    transform: translateX(-105%);
+    box-shadow: var(--shadow-lg);
+    border-right: 1px solid var(--border);
+  }
+  body:not(.sidebar-closed) aside{
+    transform: translateX(0);
+  }
+
+  main{
+    margin-left: 0;
+    padding: calc(var(--header-h) + 18px) 18px 70px;
+  }
+  body.sidebar-closed main{ margin-left: 0; }
+
+  body:not(.sidebar-closed) .sidebar-backdrop{
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .right{
+    position: fixed;
+    inset: 0 0 auto 0;
+    width: 100%;
+    height: var(--header-h);
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 14px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    z-index: 60;
+  }
+  .right .top{
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    gap: 12px;
+  }
+  .theme-toggler{ flex-direction: row; gap: 4px; padding: 4px; }
+  .theme-toggler .material-symbols-outlined{ width: 34px; height: 34px; font-size: 20px; }
+
+  .main-header h1{ font-size: 22px; }
+}
+
+@media (max-width: 640px){
+
+  main{ padding: calc(var(--header-h) + 14px) 14px 64px; }
+
+  .main-header{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .header-left{ gap: 12px; }
+
+  .date-picker{ width: 100%; }
+  .date-trigger{ width: 100%; justify-content: space-between; }
+  .calendar-popup{
+    left: 0;
+    right: 0;
+    width: auto;
+    transform-origin: top center;
+  }
+
+  .insights{ grid-template-columns: 1fr; gap: 12px; }
+  .card{ padding: 15px; }
+  .card-body h1{ font-size: 22px; }
+
+  .card-section{ padding: 16px; }
+  .order-form{ grid-template-columns: 1fr; }
+  .delivery-stats-grid{ grid-template-columns: 1fr; }
+
+  .toast-container{
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+  .toast{ max-width: none; transform: translateY(18px); }
+  .toast.show{ transform: translateY(0); }
+
+  /* when sidebar open on mobile, tighten the hidden menu margin */
+  body:not(.sidebar-closed) #menu_bar{ margin-right: -12px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
 </head>
+
 <body>
 
 <!-- ===== Toast container ===== -->
-<div id="toastContainer" class="toast-container"></div>
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
 <div class="container">
 
@@ -21,8 +1063,14 @@
       <div class="logo">
         <h2>A<span class="danger">Menu</span></h2>
       </div>
-      <button class="icon-btn close" id="close_btn" aria-label="Close menu">
-        <span class="material-symbols-outlined">close</span>
+
+      <!-- Modern close button (inside the sidebar) -->
+      <button class="icon-btn close" id="close_btn" type="button" aria-label="Close sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+          <path d="M6.5 6.5 17.5 17.5" />
+          <path d="M17.5 6.5 6.5 17.5" />
+        </svg>
       </button>
     </div>
 
@@ -39,10 +1087,6 @@
         <span class="material-symbols-outlined">delivery_truck_bolt</span>
         <h3>Delivery Partners</h3>
       </a>
-      <a href="javascript:void(0)" id="logoutLink">
-        <span class="material-symbols-outlined">logout</span>
-        <h3>Logout</h3>
-      </a>
     </nav>
   </aside>
 
@@ -52,24 +1096,66 @@
   <!-- ===== Main content ===== -->
   <main>
     <header class="main-header">
-      <div>
-        <h1 id="pageTitle">Dashboard</h1>
-        <p class="muted" id="pageSubtitle">Overview of your orders</p>
+      <!-- Header Left: Menu Button + Title -->
+      <div class="header-left">
+        <button class="icon-btn" id="menu_bar" type="button" aria-label="Open sidebar">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p class="muted" id="pageSubtitle">Overview of your orders</p>
+        </div>
       </div>
-      <input type="date" id="dateInput" class="date-input" />
+
+      <!-- Header Right: Date Picker -->
+      <div class="date-picker" id="datePicker">
+        <button type="button" class="date-trigger" id="dateTrigger"
+                aria-haspopup="dialog" aria-expanded="false">
+          <span class="material-symbols-outlined">calendar_month</span>
+          <span id="dateLabel">Today</span>
+          <span class="material-symbols-outlined chevron">expand_more</span>
+        </button>
+
+        <div class="calendar-popup" id="calendarPopup" role="dialog" aria-label="Choose a date">
+          <div class="cal-head">
+            <button type="button" class="cal-nav" id="calPrev" aria-label="Previous month">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <div class="cal-title" id="calTitle">Month</div>
+            <button type="button" class="cal-nav" id="calNext" aria-label="Next month">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+
+          <div class="cal-weekdays">
+            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span>
+            <span>Th</span><span>Fr</span><span>Sa</span>
+          </div>
+
+          <div class="cal-grid" id="calGrid"></div>
+
+          <div class="cal-foot">
+            <button type="button" class="cal-today-btn" id="calToday">Today</button>
+            <span class="cal-hint" id="calHint"></span>
+          </div>
+        </div>
+      </div>
     </header>
 
-    <!-- ===== Insights ===== -->
-    <section class="insights">
+    <!-- ===== Insights (Dashboard only) ===== -->
+    <section class="insights" id="insightsSection">
       <div class="card sales">
         <div class="card-icon"><span class="material-symbols-outlined">trending_up</span></div>
         <div class="card-body">
           <h3>Total Orders</h3>
           <h1 id="totalOrders">0</h1>
-          <small>Last 24 hours</small>
+          <small>Selected day</small>
         </div>
         <div class="progress">
-          <svg viewBox="0 0 80 80"><circle class="track" r="30" cy="40" cx="40"/><circle class="fill" id="totalRing" r="30" cy="40" cx="40"/></svg>
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <circle class="track" r="30" cy="40" cx="40" />
+            <circle class="fill" id="totalRing" r="30" cy="40" cx="40" />
+          </svg>
           <span class="number" id="totalPercent">0%</span>
         </div>
       </div>
@@ -79,10 +1165,13 @@
         <div class="card-body">
           <h3>Pending</h3>
           <h1 id="pendingOrders">0</h1>
-          <small>Last 24 hours</small>
+          <small>Selected day</small>
         </div>
         <div class="progress">
-          <svg viewBox="0 0 80 80"><circle class="track" r="30" cy="40" cx="40"/><circle class="fill" id="pendingRing" r="30" cy="40" cx="40"/></svg>
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <circle class="track" r="30" cy="40" cx="40" />
+            <circle class="fill" id="pendingRing" r="30" cy="40" cx="40" />
+          </svg>
           <span class="number" id="pendingPercent">0%</span>
         </div>
       </div>
@@ -92,10 +1181,13 @@
         <div class="card-body">
           <h3>In Transit</h3>
           <h1 id="progressOrders">0</h1>
-          <small>Last 24 hours</small>
+          <small>Selected day</small>
         </div>
         <div class="progress">
-          <svg viewBox="0 0 80 80"><circle class="track" r="30" cy="40" cx="40"/><circle class="fill" id="progressRing" r="30" cy="40" cx="40"/></svg>
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <circle class="track" r="30" cy="40" cx="40" />
+            <circle class="fill" id="progressRing" r="30" cy="40" cx="40" />
+          </svg>
           <span class="number" id="progressPercent">0%</span>
         </div>
       </div>
@@ -105,10 +1197,13 @@
         <div class="card-body">
           <h3>Completed</h3>
           <h1 id="completedOrders">0</h1>
-          <small>Last 24 hours</small>
+          <small>Selected day</small>
         </div>
         <div class="progress">
-          <svg viewBox="0 0 80 80"><circle class="track" r="30" cy="40" cx="40"/><circle class="fill" id="completedRing" r="30" cy="40" cx="40"/></svg>
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <circle class="track" r="30" cy="40" cx="40" />
+            <circle class="fill" id="completedRing" r="30" cy="40" cx="40" />
+          </svg>
           <span class="number" id="completedPercent">0%</span>
         </div>
       </div>
@@ -122,6 +1217,7 @@
           <span class="material-symbols-outlined">expand_more</span>
         </button>
       </div>
+
       <form id="addOrderForm" class="order-form">
         <input type="text" id="orderid" placeholder="Order ID" required />
         <select id="Agent" required>
@@ -144,12 +1240,13 @@
       </form>
     </section>
 
-    <!-- ===== Recent Orders ===== -->
+    <!-- ===== Orders table ===== -->
     <section class="recent_order card-section" id="recentOrdersSection">
       <div class="section-head">
-        <h2>Recent Orders</h2>
+        <h2 id="ordersSectionTitle">Recent Orders</h2>
         <span class="muted" id="ordersCount">0 orders</span>
       </div>
+
       <div class="table-wrap">
         <table>
           <thead>
@@ -171,17 +1268,15 @@
     <section class="delivery-partner-section card-section" id="deliverySection" style="display:none;">
       <div class="section-head">
         <h2>Delivery Partners</h2>
+        <span class="muted">All-time</span>
       </div>
       <div class="delivery-stats-grid" id="deliveryPartnerList"></div>
     </section>
   </main>
 
-  <!-- ===== Right rail ===== -->
+  <!-- ===== Right rail / theme toggler ===== -->
   <div class="right">
     <div class="top">
-      <button class="icon-btn" id="menu_bar" aria-label="Open menu">
-        <span class="material-symbols-outlined">menu</span>
-      </button>
       <div class="theme-toggler" role="group" aria-label="Theme toggle">
         <span class="material-symbols-outlined active" id="lightMode" title="Light mode">light_mode</span>
         <span class="material-symbols-outlined" id="darkMode" title="Dark mode">dark_mode</span>
@@ -195,33 +1290,52 @@
    AMenu Dashboard — vanilla JS
    ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
+
   /* ---------- Element refs ---------- */
   const $ = (id) => document.getElementById(id);
+
   const addForm        = $("addOrderForm");
   const tableBody      = $("orderTableBody");
   const dashboardLink  = $("dashboardLink");
   const orderLink      = $("orderLink");
   const deliveryLink   = $("deliveryLink");
-  const logoutLink     = $("logoutLink");
-  const insightsEl     = document.querySelector(".insights");
+
+  const insightsEl     = $("insightsSection");
   const addOrderEl     = $("addOrderSection");
   const recentEl       = $("recentOrdersSection");
   const deliveryEl     = $("deliverySection");
+
   const pageTitle      = $("pageTitle");
   const pageSubtitle   = $("pageSubtitle");
-  const dateInput      = $("dateInput");
   const ordersCount    = $("ordersCount");
+  const ordersTitle    = $("ordersSectionTitle");
+
   const sidebar        = $("sidebar");
   const backdrop       = $("sidebarBackdrop");
   const toastBox       = $("toastContainer");
   const toggleFormBtn  = $("toggleFormBtn");
 
+  /* ---------- Date helpers ---------- */
+  const pad   = (n) => String(n).padStart(2, "0");
+  const toKey = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
   /* ---------- State (persisted) ---------- */
   const STORAGE_KEY = "amenu_orders_v1";
   let orders = [];
-  try { orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { orders = []; }
+  try { orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { orders = []; }
 
-  const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+  const TODAY_KEY = toKey(new Date());
+  orders = orders.map((o) => ({ ...o, date: o.date || TODAY_KEY }));
+
+  const save = () => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(orders)); } catch {}
+  };
+
+  let currentView  = "dashboard";
+  let selectedDate = new Date();
+  let selectedKey  = toKey(selectedDate);
+  let calView      = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
 
   /* ---------- Toast ---------- */
   function toast(message, type = "success") {
@@ -231,40 +1345,211 @@ document.addEventListener("DOMContentLoaded", () => {
       type === "success" ? "check_circle" : type === "error" ? "error" : "info"
     }</span><span>${message}</span>`;
     toastBox.appendChild(el);
+
     requestAnimationFrame(() => el.classList.add("show"));
+
     setTimeout(() => {
       el.classList.remove("show");
       setTimeout(() => el.remove(), 300);
     }, 2600);
   }
 
-  /* ---------- Ring progress ---------- */
+  /* ============================================================
+     SIDEBAR — unified open/close
+     - sidebar open  → body has NO .sidebar-closed  → #menu_bar hidden
+     - sidebar closed → body HAS .sidebar-closed     → #menu_bar visible
+     ============================================================ */
+  const MOBILE_BREAKPOINT = 1100;
+  const isMobileView = () => window.innerWidth <= MOBILE_BREAKPOINT;
+
+  function openSidebar(){ document.body.classList.remove("sidebar-closed"); }
+  function closeSidebar(){ document.body.classList.add("sidebar-closed"); }
+  function toggleSidebar(){ document.body.classList.toggle("sidebar-closed"); }
+
+  // Initial state — open on desktop, closed on mobile
+  if (isMobileView()) closeSidebar();
+  else openSidebar();
+
+  // Menu button toggles (only visible when sidebar is closed)
+  $("menu_bar").addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleSidebar();
+  });
+
+  // Modern X button inside sidebar closes
+  $("close_btn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeSidebar();
+  });
+
+  // Backdrop click closes (mobile)
+  backdrop.addEventListener("click", closeSidebar);
+
+  // Escape closes the sidebar
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeSidebar();
+  });
+
+  // Tap nav link on mobile closes the drawer
+  document.querySelectorAll(".sidebar a").forEach((a) => {
+    a.addEventListener("click", () => {
+      if (isMobileView()) closeSidebar();
+    });
+  });
+
+  // Reset default when crossing the breakpoint
+  let lastIsMobile = isMobileView();
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const nowMobile = isMobileView();
+      if (nowMobile !== lastIsMobile) {
+        nowMobile ? closeSidebar() : openSidebar();
+        lastIsMobile = nowMobile;
+      }
+    }, 120);
+  });
+
+  /* ============================================================
+     MODERN CALENDAR
+     ============================================================ */
+  const datePicker  = $("datePicker");
+  const dateTrigger = $("dateTrigger");
+  const dateLabel   = $("dateLabel");
+  const calTitle    = $("calTitle");
+  const calGrid     = $("calGrid");
+  const calHint     = $("calHint");
+
+  function updateDateLabel() {
+    const isToday = selectedKey === toKey(new Date());
+    dateLabel.textContent = isToday
+      ? `Today · ${selectedDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`
+      : selectedDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+    const count = orders.filter(o => o.date === selectedKey).length;
+    calHint.textContent = `${count} order${count !== 1 ? "s" : ""}`;
+  }
+
+  function renderCalendar() {
+    const y = calView.getFullYear();
+    const m = calView.getMonth();
+
+    calTitle.textContent = calView.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+    const firstWeekday = new Date(y, m, 1).getDay();
+    const gridStart    = new Date(y, m, 1 - firstWeekday);
+    const todayKey     = toKey(new Date());
+
+    calGrid.innerHTML = "";
+
+    for (let i = 0; i < 42; i++) {
+      const d   = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + i);
+      const key = toKey(d);
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cal-day";
+      btn.textContent = d.getDate();
+
+      if (d.getMonth() !== m)  btn.classList.add("out");
+      if (key === todayKey)    btn.classList.add("today");
+      if (key === selectedKey) btn.classList.add("selected");
+
+      btn.addEventListener("click", () => selectDate(d));
+      calGrid.appendChild(btn);
+    }
+  }
+
+  function openCalendar() {
+    datePicker.classList.add("open");
+    dateTrigger.setAttribute("aria-expanded", "true");
+  }
+  function closeCalendar() {
+    datePicker.classList.remove("open");
+    dateTrigger.setAttribute("aria-expanded", "false");
+  }
+
+  function selectDate(d) {
+    selectedDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    selectedKey  = toKey(selectedDate);
+    calView      = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+
+    updateDateLabel();
+    renderCalendar();
+    closeCalendar();
+    refreshAll();
+  }
+
+  dateTrigger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    datePicker.classList.contains("open") ? closeCalendar() : openCalendar();
+  });
+
+  $("calendarPopup").addEventListener("click", (e) => e.stopPropagation());
+
+  document.addEventListener("click", () => closeCalendar());
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCalendar(); });
+
+  $("calPrev").addEventListener("click", (e) => {
+    e.stopPropagation();
+    calView = new Date(calView.getFullYear(), calView.getMonth() - 1, 1);
+    renderCalendar();
+  });
+  $("calNext").addEventListener("click", (e) => {
+    e.stopPropagation();
+    calView = new Date(calView.getFullYear(), calView.getMonth() + 1, 1);
+    renderCalendar();
+  });
+  $("calToday").addEventListener("click", (e) => {
+    e.stopPropagation();
+    selectDate(new Date());
+  });
+
+  /* ============================================================
+     DATA HELPERS
+     ============================================================ */
+  function visibleOrders() {
+    return orders
+      .map((o, i) => ({ ...o, _index: i }))
+      .filter((o) => o.date === selectedKey);
+  }
+
   function setRing(ringId, percentId, value) {
     const ring = $(ringId);
     const text = $(percentId);
     if (!ring || !text) return;
+
     const CIRC = 2 * Math.PI * 30;
-    const pct = Math.max(0, Math.min(100, value));
-    ring.style.strokeDasharray = `${CIRC}`;
+    const pct  = Math.max(0, Math.min(100, value));
+
+    ring.style.strokeDasharray  = `${CIRC}`;
     ring.style.strokeDashoffset = `${CIRC - (CIRC * pct) / 100}`;
     text.textContent = `${Math.round(pct)}%`;
   }
 
-  /* ---------- Render orders ---------- */
-  function renderOrders() {
-    tableBody.innerHTML = "";
-    ordersCount.textContent = `${orders.length} order${orders.length !== 1 ? "s" : ""}`;
+  function renderOrders(limit) {
+    const list  = visibleOrders();
+    const shown = limit ? list.slice(0, limit) : list;
 
-    if (orders.length === 0) {
+    tableBody.innerHTML = "";
+
+    ordersCount.textContent = (limit && list.length > limit)
+      ? `Showing ${shown.length} of ${list.length}`
+      : `${list.length} order${list.length !== 1 ? "s" : ""}`;
+
+    if (shown.length === 0) {
       tableBody.innerHTML = `
-        <tr><td colspan="6" class="empty-cell">
-          <span class="material-symbols-outlined">inbox</span>
-          <p>No orders yet. Add your first order above!</p>
-        </td></tr>`;
+        <tr>
+          <td colspan="6" class="empty-cell">
+            <span class="material-symbols-outlined">inbox</span>
+            <p>No orders on this day. Add one above!</p>
+          </td>
+        </tr>`;
       return;
     }
 
-    orders.forEach((order, index) => {
+    shown.forEach((order) => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td><span class="order-id">${order.id}</span></td>
@@ -272,14 +1557,14 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${order.name}</td>
         <td><strong>₹${order.amount}</strong></td>
         <td>
-          <select class="status-dropdown status-${order.status.toLowerCase()}" data-index="${index}">
+          <select class="status-dropdown status-${order.status.toLowerCase()}" data-index="${order._index}">
             <option value="Pending"   ${order.status === "Pending"   ? "selected" : ""}>Pending</option>
             <option value="Progress"  ${order.status === "Progress"  ? "selected" : ""}>Progress</option>
             <option value="Completed" ${order.status === "Completed" ? "selected" : ""}>Completed</option>
           </select>
         </td>
         <td>
-          <button class="delete-btn" data-index="${index}" title="Delete order">
+          <button class="delete-btn" data-index="${order._index}" title="Delete order" aria-label="Delete order">
             <span class="material-symbols-outlined">delete</span>
           </button>
         </td>`;
@@ -292,8 +1577,7 @@ document.addEventListener("DOMContentLoaded", () => {
         orders[i].status = this.value;
         this.className = `status-dropdown status-${this.value.toLowerCase()}`;
         save();
-        updateStats();
-        updateDeliveryPartners();
+        refreshAll();
         toast(`Order ${orders[i].id} → ${this.value}`, "info");
       });
     });
@@ -304,33 +1588,30 @@ document.addEventListener("DOMContentLoaded", () => {
         const removed = orders[i];
         orders.splice(i, 1);
         save();
-        renderOrders();
-        updateStats();
-        updateDeliveryPartners();
+        refreshAll();
         toast(`Order ${removed.id} deleted`, "error");
       });
     });
   }
 
-  /* ---------- Stats ---------- */
   function updateStats() {
-    const total     = orders.length;
-    const pending   = orders.filter(o => o.status === "Pending").length;
-    const progress  = orders.filter(o => o.status === "Progress").length;
-    const completed = orders.filter(o => o.status === "Completed").length;
+    const list      = visibleOrders();
+    const total     = list.length;
+    const pending   = list.filter(o => o.status === "Pending").length;
+    const progress  = list.filter(o => o.status === "Progress").length;
+    const completed = list.filter(o => o.status === "Completed").length;
 
     $("totalOrders").textContent     = total;
     $("pendingOrders").textContent   = pending;
     $("progressOrders").textContent  = progress;
     $("completedOrders").textContent = completed;
 
-    setRing("totalRing",     "totalPercent",     total ? (total / total) * 100 : 0);
-    setRing("pendingRing",   "pendingPercent",   total ? (pending / total) * 100 : 0);
-    setRing("progressRing",  "progressPercent",  total ? (progress / total) * 100 : 0);
+    setRing("totalRing",     "totalPercent",     total ? 100 : 0);
+    setRing("pendingRing",   "pendingPercent",   total ? (pending   / total) * 100 : 0);
+    setRing("progressRing",  "progressPercent",  total ? (progress  / total) * 100 : 0);
     setRing("completedRing", "completedPercent", total ? (completed / total) * 100 : 0);
   }
 
-  /* ---------- Delivery partners ---------- */
   function updateDeliveryPartners() {
     const container = $("deliveryPartnerList");
     const agents = ["Gopi", "Deepak", "Rishi"];
@@ -348,6 +1629,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (total > 0) hasOrders = true;
 
       const initials = agent.slice(0, 2).toUpperCase();
+
       const card = document.createElement("div");
       card.className = "delivery-card";
       card.innerHTML = `
@@ -359,9 +1641,18 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         </div>
         <div class="delivery-stats">
-          <div class="stat-item"><span class="stat-label">Completed</span><span class="stat-value green">${completed}</span></div>
-          <div class="stat-item"><span class="stat-label">Pending</span><span class="stat-value orange">${pending}</span></div>
-          <div class="stat-item"><span class="stat-label">In Progress</span><span class="stat-value blue">${progress}</span></div>
+          <div class="stat-item">
+            <span class="stat-label">Completed</span>
+            <span class="stat-value green">${completed}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Pending</span>
+            <span class="stat-value orange">${pending}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">In Progress</span>
+            <span class="stat-value blue">${progress}</span>
+          </div>
         </div>`;
       container.appendChild(card);
     });
@@ -375,9 +1666,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ---------- Add order ---------- */
+  function refreshAll() {
+    renderOrders(currentView === "dashboard" ? 5 : null);
+    updateStats();
+    updateDeliveryPartners();
+    updateDateLabel();
+  }
+
+  /* ============================================================
+     ADD ORDER
+     ============================================================ */
   addForm.addEventListener("submit", (e) => {
     e.preventDefault();
+
     const id     = $("orderid").value.trim();
     const agent  = $("Agent").value;
     const name   = $("ordername").value.trim();
@@ -389,68 +1690,83 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    orders.unshift({ id, agent, name, amount, status });
+    orders.unshift({
+      id, agent, name, amount, status,
+      date: toKey(new Date())
+    });
     save();
-    renderOrders();
-    updateStats();
-    updateDeliveryPartners();
     addForm.reset();
+
+    const today = new Date();
+    if (selectedKey !== toKey(today)) {
+      selectDate(today);
+    } else {
+      refreshAll();
+    }
+
     toast(`Order ${id} added`, "success");
   });
 
-  /* ---------- Navigation ---------- */
+  /* ============================================================
+     NAVIGATION
+     ============================================================ */
   function setActiveLink(link) {
     document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active"));
     if (link) link.classList.add("active");
   }
 
   function showView(view) {
-    if (view === "dashboard" || view === "orders") {
-      insightsEl.style.display = "grid";
-      addOrderEl.style.display = "block";
-      recentEl.style.display   = view === "orders" ? "block" : "none";
-      deliveryEl.style.display = "none";
-      dateInput.style.display  = "inline-block";
-      pageTitle.textContent    = view === "orders" ? "Orders" : "Dashboard";
-      pageSubtitle.textContent = view === "orders" ? "Manage your orders" : "Overview of your orders";
-      setActiveLink(view === "orders" ? orderLink : dashboardLink);
-    } else if (view === "delivery") {
-      insightsEl.style.display = "grid";
-      addOrderEl.style.display = "none";
-      recentEl.style.display   = "none";
-      deliveryEl.style.display = "block";
-      dateInput.style.display  = "inline-block";
+    currentView = view;
+
+    const isDashboard = view === "dashboard";
+    const isOrders    = view === "orders";
+    const isDelivery  = view === "delivery";
+
+    insightsEl.style.display = isDashboard ? "grid"  : "none";
+    addOrderEl.style.display = isDelivery  ? "none"  : "block";
+    recentEl.style.display   = isDelivery  ? "none"  : "block";
+    deliveryEl.style.display = isDelivery  ? "block" : "none";
+
+    datePicker.classList.toggle("is-hidden", isDelivery);
+
+    ordersTitle.textContent = isDashboard ? "Recent Orders" : "All Orders";
+
+    if (isDashboard) {
+      pageTitle.textContent    = "Dashboard";
+      pageSubtitle.textContent = "Overview of your orders";
+      setActiveLink(dashboardLink);
+    } else if (isOrders) {
+      pageTitle.textContent    = "Orders";
+      pageSubtitle.textContent = "Manage and update every order";
+      setActiveLink(orderLink);
+    } else {
       pageTitle.textContent    = "Delivery Partners";
-      pageSubtitle.textContent = "Performance by agent";
+      pageSubtitle.textContent = "All-time performance by agent";
       setActiveLink(deliveryLink);
-      updateDeliveryPartners();
     }
-    closeSidebar();
+
+    refreshAll();
+    closeCalendar();
   }
 
   dashboardLink.addEventListener("click", () => showView("dashboard"));
   orderLink.addEventListener("click",     () => showView("orders"));
   deliveryLink.addEventListener("click",  () => showView("delivery"));
-  logoutLink.addEventListener("click",    () => toast("Logout is disabled in this demo.", "info"));
 
-  /* ---------- Sidebar (mobile) ---------- */
-  function openSidebar()  { sidebar.classList.add("open");  backdrop.classList.add("show"); }
-  function closeSidebar() { sidebar.classList.remove("open"); backdrop.classList.remove("show"); }
-
-  $("menu_bar").addEventListener("click", () =>
-    sidebar.classList.contains("open") ? closeSidebar() : openSidebar()
-  );
-  $("close_btn").addEventListener("click", closeSidebar);
-  backdrop.addEventListener("click", closeSidebar);
-
-  /* ---------- Add-order form collapse ---------- */
+  /* ============================================================
+     ADD-ORDER FORM COLLAPSE
+     ============================================================ */
   toggleFormBtn.addEventListener("click", () => {
     addOrderEl.classList.toggle("collapsed");
     const icon = toggleFormBtn.querySelector(".material-symbols-outlined");
-    icon.textContent = addOrderEl.classList.contains("collapsed") ? "expand_more" : "expand_less";
+    icon.textContent = addOrderEl.classList.contains("collapsed")
+      ? "expand_more"
+      : "expand_less";
   });
 
-  /* ---------- Theme (persisted + system default) ---------- */
+  /* ============================================================
+     THEME
+     ============================================================ */
   const THEME_KEY = "amenu_theme";
   const lightBtn = $("lightMode");
   const darkBtn  = $("darkMode");
@@ -459,18 +1775,20 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.toggle("dark-theme-variables", theme === "dark");
     lightBtn.classList.toggle("active", theme === "light");
     darkBtn.classList.toggle("active",  theme === "dark");
-    localStorage.setItem(THEME_KEY, theme);
+    try { localStorage.setItem(THEME_KEY, theme); } catch {}
   }
 
-  const savedTheme = localStorage.getItem(THEME_KEY);
+  const savedTheme  = localStorage.getItem(THEME_KEY);
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   applyTheme(savedTheme || (prefersDark ? "dark" : "light"));
 
   lightBtn.addEventListener("click", () => applyTheme("light"));
   darkBtn.addEventListener("click",  () => applyTheme("dark"));
 
-  /* ---------- Cursor-follow glow on cards (desktop) ---------- */
-  if (window.matchMedia("(hover: hover)").matches) {
+  /* ============================================================
+     CURSOR-FOLLOW GLOW (desktop only)
+     ============================================================ */
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
     document.querySelectorAll(".card").forEach((card) => {
       card.addEventListener("mousemove", (e) => {
         const r = card.getBoundingClientRect();
@@ -480,19 +1798,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- Init ---------- */
-  renderOrders();
-  updateStats();
-  updateDeliveryPartners();
+  /* ============================================================
+     INIT
+     ============================================================ */
+  updateDateLabel();
+  renderCalendar();
   showView("dashboard");
 
-  // Close sidebar when resizing to desktop
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 900) closeSidebar();
-  });
-
-  console.log("✅ AMenu dashboard ready.");
+  console.log("✅ AMenu dashboard ready — today is", selectedKey);
 });
 </script>
+
 </body>
 </html>
